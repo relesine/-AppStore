@@ -1,0 +1,8 @@
+# 后端 Docker 构建上下文裁剪
+target/
+logs/
+*.log
+.idea/
+.vscode/
+*.iml
+.git/

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+logs/
+.git/
+.vscode/
+.idea/
+Dockerfile
+.dockerignore
+*.log
+.eslintcache/

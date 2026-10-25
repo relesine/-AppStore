@@ -1,0 +1,245 @@
+/* ============================================================
+   轻量应用商店 - 全局样式 v2（去 AI 化设计系统）
+   对标：用户端=华为应用市场/腾讯应用宝；后台=阿里云控制台/飞书管理端
+   基调：纯白/浅灰底、小圆角(4-8px)、1px 描边卡片、克制留白、信息密度优先
+   主色不超过 2 种，仅作功能强调色，不做大面积铺色
+   ============================================================ */
+
+:root {
+  /* 品牌色板（v4：企业级品牌蓝，替代组件库默认色） */
+  --app-primary: #2e6be6;
+  --app-primary-dark: #2457c4;
+  --app-primary-light: #6f9bef;
+  --app-primary-bg: #ecf1fc;
+  --app-success: #52a352;
+  --app-warning: #e6a23c;
+  --app-danger: #f56c6c;
+  --app-info: #909399;
+
+  /* 文字色（三级字号/字重体系配合使用） */
+  --app-text-main: #303133;
+  --app-text-regular: #606266;
+  --app-text-secondary: #909399;
+  --app-text-placeholder: #c0c4cc;
+
+  /* 背景与边框 */
+  --app-bg-page: #f5f7fa;
+  --app-bg-card: #ffffff;
+  --app-bg-muted: #f0f7ff;
+  --app-border: #e4e7ed;
+  --app-border-light: #ebeef5;
+
+  /* 圆角：小圆角体系（卡片6px、控件4px、弹层4px） */
+  --app-radius-sm: 4px;
+  --app-radius-md: 6px;
+  --app-radius-lg: 8px;
+
+  /* 阴影：仅弹窗/下拉等浮层使用，普通卡片一律 1px 描边 */
+  --app-shadow-overlay: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --app-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* 8px 基数间距 */
+  --app-gap-sm: 8px;
+  --app-gap-md: 16px;
+  --app-gap-lg: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--app-text-main);
+  background-color: var(--app-bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 页面容器：自动适配宽度 */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+/* 卡片通用样式：描边替代阴影，hover 仅描边加深 + 底色微变，无上浮动效 */
+.card-hover {
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.card-hover:hover {
+  border-color: #a9ccf5;
+  background-color: #f8fbff;
+}
+
+/* ============================================================
+   Element Plus 深度定制（基于原生组件二次调整，不替换组件库）
+   ============================================================ */
+
+/* 卡片：6px 小圆角 + 1px 描边，去弥散阴影 */
+.el-card {
+  border-radius: var(--app-radius-md);
+  box-shadow: none;
+  border: 1px solid var(--app-border);
+}
+.el-card__header { padding: 14px 20px; }
+
+/* 按钮：紧凑规格、纯色填充、4px 圆角，默认不加厚重阴影 */
+.el-button {
+  border-radius: var(--app-radius-sm);
+  font-weight: 500;
+}
+
+/* 表格：浅灰表头、13px 字号、压缩行高，信息密度对齐真实后台产品 */
+.el-table {
+  --el-table-header-bg-color: #f5f7fa;
+  --el-table-header-text-color: #606266;
+  --el-table-row-hover-bg-color: #f8fbff;
+  font-size: 13px;
+}
+.el-table th.el-table__cell { padding: 10px 0; font-weight: 600; }
+.el-table td.el-table__cell { padding: 7px 0; }
+
+/* 弹窗：小圆角 + 轻阴影，标题收敛（15px/600），遮罩半透黑（Element 默认） */
+.el-dialog {
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-overlay);
+}
+.el-dialog__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--app-text-main);
+}
+.el-dialog__header { padding-bottom: 12px; }
+
+/* 消息提示：轻量 4px 圆角（保留顶部居中默认挂载，避免破坏多消息自动堆叠） */
+.el-message {
+  border-radius: var(--app-radius-sm);
+  box-shadow: var(--app-shadow-overlay);
+  border-color: var(--app-border-light);
+}
+
+/* 表单控件：紧凑输入规格 */
+.el-input__wrapper { border-radius: var(--app-radius-sm); }
+.el-form--inline .el-form-item { margin-right: 8px; }
+
+/* 下拉/弹出层：轻阴影 + 4px 圆角 */
+.el-popper { border-radius: var(--app-radius-sm); }
+.el-dropdown-menu { padding: 4px; }
+
+/* 菜单：弱化选中，颜色/背景过渡 < 0.2s */
+.el-menu-item { transition: color 0.2s ease, background-color 0.2s ease; }
+
+/* 通用滚动条 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #c0c4cc; border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Element Plus 主题变量（主色与控件圆角全局统一） */
+:root {
+  --el-color-primary: #2e6be6;
+  --el-color-primary-dark-2: #2457c4;
+  --el-color-primary-light-3: #6f9bef;
+  --el-color-primary-light-5: #97b7f2;
+  --el-color-primary-light-7: #bfd3f7;
+  --el-color-primary-light-8: #d8e3fa;
+  --el-color-primary-light-9: #ecf1fc;
+  --el-border-radius-base: 4px;
+}
+
+/* ============================================================
+   v3 精美化增强（真实产品质感层）
+   ============================================================ */
+
+/* 文本选区与键盘焦点态：细节处的可交互反馈 */
+::selection { background: rgba(64, 158, 255, 0.16); }
+.el-button:focus-visible,
+.el-menu-item:focus-visible {
+  outline: 2px solid rgba(64, 158, 255, 0.45);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+/* 卡片 hover：描边加深 + 极轻投影（精致但不上浮） */
+.card-hover:hover {
+  box-shadow: 0 2px 10px rgba(31, 56, 88, 0.06);
+}
+
+/* 后台浅色侧边导航（管理端/作者端 el-aside 专用，不影响用户端横向菜单） */
+.el-aside .el-menu { border-right: none; padding: 8px; background: #fff; }
+.el-aside .el-menu-item {
+  height: 42px;
+  line-height: 42px;
+  margin-bottom: 2px;
+  border-radius: 6px;
+  color: var(--app-text-regular, #606266);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.el-aside .el-menu-item:hover { background: var(--app-bg-page, #f5f7fa); color: var(--app-text-main, #303133); }
+.el-aside .el-menu-item.is-active {
+  background: var(--app-bg-muted, #eef4ff);
+  color: var(--app-primary, #409eff);
+  font-weight: 600;
+}
+
+/* 数字统一使用等宽数字（统计卡、表格数值列对齐） */
+.stat-info .num,
+.el-table .cell,
+.el-statistic__number {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 页面切换：0.15s 淡入上移，克制不花哨（配合 Layout 中 transition name="page"） */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.page-enter-from { opacity: 0; transform: translateY(4px); }
+.page-leave-to { opacity: 0; }
+
+/* 干净的滚动条：悬停才显影，避免喧宾夺主 */
+::-webkit-scrollbar-thumb:hover { background: #a8abb2; }
+
+/* ============================================================
+   v4 精美质感层
+   ============================================================ */
+
+/* 键盘焦点环统一至品牌蓝 */
+.el-button:focus-visible,
+.el-menu-item:focus-visible {
+  outline-color: rgba(46, 107, 230, 0.4);
+}
+
+/* 输入框：focus 时描边 + 品牌色柔光（真实产品的呼吸感） */
+.el-input__wrapper.is-focus,
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px var(--el-color-primary) inset, 0 0 0 3px rgba(46, 107, 230, 0.1);
+}
+
+/* 卡片 hover 同步新主色 */
+.card-hover:hover {
+  border-color: #b7cdf5;
+}
+
+/* 页面/卡片标题体系 */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* 消息提示带入品牌左侧描边（更精致的 toast） */
+.el-message.el-message--success { border-left: 3px solid var(--app-success); }
+.el-message.el-message--error { border-left: 3px solid var(--app-danger); }
+.el-message.el-message--warning { border-left: 3px solid var(--app-warning); }
+.el-message.el-message--info { border-left: 3px solid var(--app-info); }
+
+

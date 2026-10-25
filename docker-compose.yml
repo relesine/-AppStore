@@ -1,0 +1,113 @@
+# 轻量应用商店 — 一键容器化部署（v1.3 企业级）
+# 用法：
+#   docker compose up -d --build          # 构建并启动全部服务
+#   docker compose ps                     # 查看状态
+#   docker compose logs -f backend        # 跟踪后端日志
+#   docker compose down                   # 停止（数据保留）
+#   docker compose down -v                # 停止并清空数据
+# 端口：用户端 8073 / 作者端 8074 / 管理端 8075 / 后端 8080（仅内网）
+name: appstore
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: appstore-mysql
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-123456}
+      MYSQL_DATABASE: appstore
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD:-123456}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: appstore-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    image: appstore-backend:latest
+    container_name: appstore-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRINGDOC_ENABLED: "true"
+      TZ: Asia/Shanghai
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD:-123456}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      FILE_UPLOAD_PATH: /data/uploads/
+      JAVA_OPTS: -XX:+UseG1GC -XX:MaxRAMPercentage=75.0
+    volumes:
+      - uploads-data:/data/uploads
+      - backend-logs:/app/logs
+    # 如需在后端主机直连8080再放开：
+    # ports:
+    #   - "8080:8080"
+
+  web-user:
+    build:
+      context: ./frontend-user
+    image: appstore-web-user:latest
+    container_name: appstore-web-user
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8073:80"
+
+  web-author:
+    build:
+      context: ./frontend-author
+    image: appstore-web-author:latest
+    container_name: appstore-web-author
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8074:80"
+
+  web-admin:
+    build:
+      context: ./frontend-admin
+    image: appstore-web-admin:latest
+    container_name: appstore-web-admin
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8075:80"
+
+volumes:
+  mysql-data:
+  redis-data:
+  uploads-data:
+  backend-logs:

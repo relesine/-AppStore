@@ -2,6 +2,7 @@
 
 > 一个覆盖应用分发全链路的全栈项目：Spring Boot 后端 + 用户端 / 作者端 / 管理端三套 Vue 3 前端。
 > 当前版本：**v1.3.0（企业级增强版）**
+![输入图片说明](2026-10-23-235204-mvmegoj448w5.png)
 
 ![JDK](https://img.shields.io/badge/JDK-17-blue?style=flat-square)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-6DB33F?style=flat-square&logo=spring&logoColor=white)
